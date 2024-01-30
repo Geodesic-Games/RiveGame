@@ -1,0 +1,551 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EpicGames.Box</name>
+    </assembly>
+    <members>
+        <member name="T:EpicGames.Box.Utils">
+            <summary>
+            Box utils
+            </summary>
+            <summary>
+            Box utils
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.Utils.IsAvailable">
+            <summary>
+            Is box available?
+            </summary>
+        </member>
+        <member name="T:EpicGames.Box.IBoxInterface">
+            <summary>
+            Base interface for all box class that have unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxInterface.GetHandle">
+            <summary>
+            Returns the handle to an unmanaged object
+            </summary>
+            <returns>An unmanaged handle</returns>
+        </member>
+        <member name="T:EpicGames.Box.LogEntryType">
+            <summary>
+            The verbosity of a log entry
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.LogEntryType.Error">
+            <summary>
+            Error verbosity
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.LogEntryType.Warning">
+            <summary>
+            Warning verbosity
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.LogEntryType.Info">
+            <summary>
+            Info verbosity
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.LogEntryType.Detail">
+            <summary>
+            Info verbosity
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.LogEntryType.Debug">
+            <summary>
+            Info verbosity
+            </summary>
+        </member>
+        <member name="T:EpicGames.Box.IBoxLogger">
+            <summary>
+            Base interface for box logging functionality
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxLogger.BeginScope">
+            <summary>
+            Begin logging scope
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxLogger.EndScope">
+            <summary>
+            End logging scope
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxLogger.Log(EpicGames.Box.LogEntryType,System.String)">
+            <summary>
+            Log message
+            </summary>
+            <param name="type">entry verbosity</param>
+            <param name="message">the message to log</param>
+        </member>
+        <member name="M:EpicGames.Box.IBoxLogger.CreateBoxLogger(Microsoft.Extensions.Logging.ILogger)">
+            <summary>
+            Create a IBoxLogger object for the current host platform
+            </summary>
+            <param name="logger">The logger to wrap</param>
+            <returns></returns>
+            <exception cref="T:System.PlatformNotSupportedException">If the host platform is not supported</exception>
+        </member>
+        <member name="T:EpicGames.Box.BoxProcessStartInfo">
+            <summary>
+            Information needed to create a box process
+            </summary>
+        </member>
+        <member name="T:EpicGames.Box.BoxProcessStartInfo.CommonProcessConfigs">
+            <summary>
+            Common configs for processes to run
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxProcessStartInfo.CommonProcessConfigs.CompileMsvc">
+            <summary>
+            MSVC based compiler
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxProcessStartInfo.CommonProcessConfigs.CompileClang">
+            <summary>
+            Clang based compiler
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxProcessStartInfo.Application">
+            <summary>
+            The path to the application binary
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxProcessStartInfo.WorkingDirectory">
+            <summary>
+            The working directory
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxProcessStartInfo.Arguments">
+            <summary>
+            The command line arguments
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxProcessStartInfo.Description">
+            <summary>
+            A text description of the process
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxProcessStartInfo.Configuration">
+            <summary>
+            Which configuration to use
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxProcessStartInfo.Priority">
+            <summary>
+            The process priority of the created process
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxProcessStartInfo.OutputStatsThresholdMs">
+            <summary>
+            Threshold in which to report output stats
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxProcessStartInfo.TrackInputs">
+            <summary>
+            If input should be tracked
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxProcessStartInfo.LogFile">
+            <summary>
+            A path to a log file, or null for not log file
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxProcessStartInfo.UserData">
+            <summary>
+            Arbitary user data to pass along with the process
+            </summary>
+        </member>
+        <member name="T:EpicGames.Box.IBoxProcessStartInfo">
+            <summary>
+            Base interface for process start info
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxProcessStartInfo.CreateBoxProcessStartInfo(EpicGames.Box.BoxProcessStartInfo)">
+            <summary>
+            Create a IBoxProcessStartInfo object for the current host platform 
+            </summary>
+            <param name="info">The start info for the process</param>
+            <returns></returns>
+            <exception cref="T:System.PlatformNotSupportedException">If the host platform is not supported</exception>
+        </member>
+        <member name="T:EpicGames.Box.IBoxProcess">
+            <summary>
+            Interface for a BoxServer instance
+            </summary>
+        </member>
+        <member name="T:EpicGames.Box.IBoxProcess.ExitedEventArgs">
+            <summary>
+            Event args for exited event
+            </summary>
+        </member>
+        <member name="P:EpicGames.Box.IBoxProcess.ExitedEventArgs.ExitCode">
+            <summary>
+            Process exit code
+            </summary>
+        </member>
+        <member name="P:EpicGames.Box.IBoxProcess.ExitedEventArgs.ExecutingHost">
+            <summary>
+            The remote host that ran the process, if run remotely
+            </summary>
+        </member>
+        <member name="P:EpicGames.Box.IBoxProcess.ExitedEventArgs.LogLines">
+            <summary>
+            Captured output lines
+            </summary>
+        </member>
+        <member name="P:EpicGames.Box.IBoxProcess.ExitedEventArgs.TotalProcessorTime">
+            <summary>
+            Total time spent for the processor
+            </summary>
+        </member>
+        <member name="P:EpicGames.Box.IBoxProcess.ExitedEventArgs.TotalWallTime">
+            <summary>
+            Total wall time spent
+            </summary>
+        </member>
+        <member name="P:EpicGames.Box.IBoxProcess.ExitedEventArgs.UserData">
+            <summary>
+            Total wall time spent
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxProcess.ExitedEventArgs.#ctor(EpicGames.Box.IBoxProcess)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="process">The process to pull data from</param>
+        </member>
+        <member name="T:EpicGames.Box.IBoxProcess.ExitedEventHandler">
+            <summary>
+            Delegate for Exited events
+            </summary>
+            <param name="sender">The sender object</param>
+            <param name="e">The event args</param>
+        </member>
+        <member name="E:EpicGames.Box.IBoxProcess.Exited">
+            <summary>
+            Exited event handler
+            </summary>
+        </member>
+        <member name="P:EpicGames.Box.IBoxProcess.ExitCode">
+            <summary>
+            Process exit code
+            </summary>
+        </member>
+        <member name="P:EpicGames.Box.IBoxProcess.ExecutingHost">
+            <summary>
+            The remote host that ran the process, if run remotely
+            </summary>
+        </member>
+        <member name="P:EpicGames.Box.IBoxProcess.LogLines">
+            <summary>
+            Captured output lines
+            </summary>
+        </member>
+        <member name="P:EpicGames.Box.IBoxProcess.TotalProcessorTime">
+            <summary>
+            Total time spent for the processor
+            </summary>
+        </member>
+        <member name="P:EpicGames.Box.IBoxProcess.TotalWallTime">
+            <summary>
+            Total wall time spent
+            </summary>
+        </member>
+        <member name="P:EpicGames.Box.IBoxProcess.Hash">
+            <summary>
+            Unique Box hash for this process (not stable between runs)
+            </summary>
+        </member>
+        <member name="P:EpicGames.Box.IBoxProcess.UserData">
+            <summary>
+            Arbitary user data
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxProcess.Cancel(System.Boolean)">
+            <summary>
+            Cancel the running process
+            </summary>
+            <param name="terminate">If the process should be force terminated</param>
+        </member>
+        <member name="M:EpicGames.Box.IBoxProcess.CreateBoxProcess(System.IntPtr,EpicGames.Box.IBoxProcessStartInfo,EpicGames.Box.IBoxProcess.ExitedEventHandler,System.Object)">
+            <summary>
+            Create a IBoxProcess object for the current host platform
+            </summary>
+            <param name="handle">unmanaged pointer to the Box process</param>
+            <param name="info">the processes start info</param>
+            <param name="exitedEventHandler">Optional callback when the process exits</param>
+            <param name="userData">Arbitary user data</param>
+            <returns></returns>
+            <exception cref="T:System.PlatformNotSupportedException">If the host platform is not supported</exception>
+        </member>
+        <member name="T:EpicGames.Box.IBoxServer">
+            <summary>
+            Base interface for a BoxServer instance
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxServer.Start(System.String,System.Int32)">
+            <summary>
+            Start the server
+            </summary>
+            <param name="ip">Ip address or host name</param>
+            <param name="port">The port to use, -1 for default</param>
+            <returns></returns>
+        </member>
+        <member name="M:EpicGames.Box.IBoxServer.Stop">
+            <summary>
+            Stop the server
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxServer.AddNamedConnection(System.String)">
+            <summary>
+            Add a named connection to the server
+            </summary>
+            <param name="name">The name of the connection</param>
+            <returns>Success</returns>
+        </member>
+        <member name="M:EpicGames.Box.IBoxServer.CreateBoxServer(System.Int32,System.Int32,EpicGames.Box.IBoxLogger)">
+            <summary>
+            Create a IBoxServer object for the current host platform 
+            </summary>
+            <param name="maxWorkers">Maximum number of workers</param>
+            <param name="sendSize">Send size in bytes</param>
+            <param name="logger">The box logger</param>
+            <returns></returns>
+            <exception cref="T:System.PlatformNotSupportedException"></exception>
+        </member>
+        <member name="M:EpicGames.Box.BoxServerWindows.GetHandle">
+            <inheritdoc/>
+        </member>
+        <member name="T:EpicGames.Box.BoxSessionServerCreateInfo">
+            <summary>
+            Information needed to create a box session server
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxSessionServerCreateInfo.RootDirectory">
+            <summary>
+            Root directory to store content addressable data
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxSessionServerCreateInfo.TraceOutputFile">
+            <summary>
+            Path to a trace file that records the build
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxSessionServerCreateInfo.DisableCustomAllocator">
+            <summary>
+            If the custom allocator should be disabled
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxSessionServerCreateInfo.LaunchVisualizer">
+            <summary>
+            If the visualizer should be launched
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxSessionServerCreateInfo.ResetCas">
+            <summary>
+            If the content addressable storage should be reset
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxSessionServerCreateInfo.WriteToDisk">
+            <summary>
+            If intermediate/output files should be written to disk
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxSessionServerCreateInfo.DetailedTrace">
+            <summary>
+            More detailed trace information
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.BoxSessionServerCreateInfo.#ctor(EpicGames.Core.DirectoryReference,EpicGames.Core.FileReference,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="rootDirectory">Root directory to store content addressable data</param>
+            <param name="traceOutputFile">Path to a trace file that records the build</param>
+            <param name="disableCustomAllocator">If the custom allocator should be disabled</param>
+            <param name="launchVisualizer">If the visualizer should be launched</param>
+            <param name="resetCas">If the content addressable storage should be reset</param>
+            <param name="writeToDisk">If intermediate/output files should be written to disk</param>
+            <param name="detailedTrace">More detailed trace information</param>
+        </member>
+        <member name="T:EpicGames.Box.IBoxSessionServerCreateInfo">
+            <summary>
+            Base interface for session server create info
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxSessionServerCreateInfo.CreateBoxSessionServerCreateInfo(EpicGames.Box.IBoxStorageServer,EpicGames.Box.IBoxServer,EpicGames.Box.IBoxLogger,EpicGames.Box.BoxSessionServerCreateInfo)">
+            <summary>
+            Create a IBoxSessionServerCreateInfo object for the current host platform
+            </summary>
+            <param name="storage">The storage server</param>
+            <param name="client">The client</param>
+            <param name="logger">The box logger</param>
+            <param name="info">The session create info</param>
+            <returns></returns>
+            <exception cref="T:System.PlatformNotSupportedException">If the host platform is not supported</exception>
+        </member>
+        <member name="T:EpicGames.Box.IBoxSessionServer">
+            <summary>
+            Base interface for a BoxServer instance
+            </summary>
+        </member>
+        <member name="T:EpicGames.Box.IBoxSessionServer.RemoteProcessSlotAvailableEventArgs">
+            <summary>
+            Event args for remote process slot available event
+            </summary>
+        </member>
+        <member name="T:EpicGames.Box.IBoxSessionServer.RemoteProcessReturnedEventArgs">
+            <summary>
+            Event args for remote process returned event
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxSessionServer.RemoteProcessReturnedEventArgs.#ctor(EpicGames.Box.IBoxProcess)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="process">The process being returned</param>
+        </member>
+        <member name="P:EpicGames.Box.IBoxSessionServer.RemoteProcessReturnedEventArgs.Process">
+            <summary>
+            The remote process that was returned
+            </summary>
+        </member>
+        <member name="T:EpicGames.Box.IBoxSessionServer.RemoteProcessSlotAvailableEventHandler">
+            <summary>
+            Degeate for remote process slot available events
+            </summary>
+            <param name="sender">The sender object</param>
+            <param name="e">The event args</param>
+        </member>
+        <member name="T:EpicGames.Box.IBoxSessionServer.RemoteProcessReturnedEventHandler">
+            <summary>
+            Degeate for remote process returned events
+            </summary>
+            <param name="sender">The sender object</param>
+            <param name="e">The event args</param>
+        </member>
+        <member name="E:EpicGames.Box.IBoxSessionServer.RemoteProcessSlotAvailable">
+            <summary>
+            Remote process slot available event handler
+            </summary>
+        </member>
+        <member name="E:EpicGames.Box.IBoxSessionServer.RemoteProcessReturned">
+            <summary>
+            Remote process returned event handler
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxSessionServer.DisableRemoteExecution">
+            <summary>
+            Will tell all remote machines that they can disconnect once their active processes are done
+            Will also stop listening for new remote machines
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxSessionServer.SetMaxRemoteProcessCount(System.UInt32)">
+            <summary>
+            Set max number of processes that can be executed remotely.
+            Setting this can let the backend disconnect remote workers earlier
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxSessionServer.RunProcess(EpicGames.Box.BoxProcessStartInfo,System.Boolean,EpicGames.Box.IBoxProcess.ExitedEventHandler)">
+            <summary>
+            Run a local process
+            </summary>
+            <param name="info">Process start info</param>
+            <param name="async">If the process should be run async</param>
+            <param name="exitedEventHandler">Optional callback when the process exits</param>
+            <returns>The process being run</returns>
+        </member>
+        <member name="M:EpicGames.Box.IBoxSessionServer.RunProcessRemote(EpicGames.Box.BoxProcessStartInfo,EpicGames.Box.IBoxProcess.ExitedEventHandler,System.Double)">
+            <summary>
+            Run a remote process
+            </summary>
+            <param name="info">Process start info</param>
+            <param name="exitedEventHandler">Optional callback when the process exits</param>
+            <param name="weight">Number of cores this process uses</param>
+            <returns>The remote process being run</returns>
+        </member>
+        <member name="M:EpicGames.Box.IBoxSessionServer.RefreshDirectory(EpicGames.Core.DirectoryReference)">
+            <summary>
+            Refresh cached information about a directory
+            </summary>
+            <param name="directory">The directory to refresh</param>
+        </member>
+        <member name="M:EpicGames.Box.IBoxSessionServer.SetCustomCasKeyFromTrackedInputs(EpicGames.Core.FileReference,EpicGames.Core.DirectoryReference,EpicGames.Box.IBoxProcess)">
+            <summary>
+            Set a custom cas key for a process's tracked inputs
+            </summary>
+            <param name="file">The file to track</param>
+            <param name="workingDirectory">The working directory</param>
+            <param name="process">The process to get tracked inputs from</param>
+        </member>
+        <member name="M:EpicGames.Box.IBoxSessionServer.CancelAll">
+            <summary>
+            Cancel all processes
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxSessionServer.PrintSummary">
+            <summary>
+            Print summary information to the logger
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxSessionServer.CreateBoxSessionServer(EpicGames.Box.IBoxSessionServerCreateInfo)">
+            <summary>
+            Create a IBoxSessionServer object for the current host platform
+            </summary>
+            <param name="info">The session server create info</param>
+            <returns></returns>
+            <exception cref="T:System.PlatformNotSupportedException">If the host platform is not supported</exception>
+        </member>
+        <member name="T:EpicGames.Box.BoxStorageServerCreateInfo">
+            <summary>
+            Information needed to create a box storage server
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxStorageServerCreateInfo.RootDirectory">
+            <summary>
+            The root directory for the storage
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxStorageServerCreateInfo.CapacityBytes">
+            <summary>
+            The capacity of the storage in bytes
+            </summary>
+        </member>
+        <member name="F:EpicGames.Box.BoxStorageServerCreateInfo.StoreCompressed">
+            <summary>
+            If the storage should be stored as compressed
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.BoxStorageServerCreateInfo.#ctor(EpicGames.Core.DirectoryReference,System.UInt64,System.Boolean)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="rootDirectory">The root directory for the storage</param>
+            <param name="capacityBytes">The capacity of the storage in bytes</param>
+            <param name="StoreCompressed">If the storage should be stored as compressed</param>
+        </member>
+        <member name="T:EpicGames.Box.IBoxStorageServer">
+            <summary>
+            Base interface for a BoxStorageServer instance
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxStorageServer.SaveCasTable">
+            <summary>
+            Save tge content addressabale storage table
+            </summary>
+        </member>
+        <member name="M:EpicGames.Box.IBoxStorageServer.CreateBoxStorageServer(EpicGames.Box.IBoxServer,EpicGames.Box.IBoxLogger,EpicGames.Box.BoxStorageServerCreateInfo)">
+            <summary>
+            Create a IBoxStorageServer object for the current host platform
+            </summary>
+            <param name="server">The server</param>
+            <param name="logger">The box logger</param>
+            <param name="info">The storage create info</param>
+            <returns></returns>
+            <exception cref="T:System.PlatformNotSupportedException"></exception>
+        </member>
+    </members>
+</doc>
