@@ -1,5 +1,9 @@
 # Visual Studio 2015 user specific files
 .vs/
+.vscode/
+
+# Jetbrains Rider user specific files
+.idea/
 
 # Compiled Object files
 *.slo
@@ -46,7 +50,7 @@ SourceArt/**/*.png
 SourceArt/**/*.tga
 
 # Binary Files
-# Binaries/*
+Binaries/*
 Plugins/*/Binaries/*
 
 # Builds
@@ -70,5 +74,3 @@ Saved/*
 Intermediate/*
 Plugins/*/Intermediate/*
 
-# Cache files for the editor to use
-DerivedDataCache/*
