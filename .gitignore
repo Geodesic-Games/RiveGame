@@ -45,11 +45,14 @@
 *.VC.db
 *.VC.opendb
 
+*.pdb
+
 # Precompiled Assets
 SourceArt/**/*.png
 SourceArt/**/*.tga
 
 # Binary Files
+Binaries/
 Binaries/*
 Plugins/*/Binaries/*
 
