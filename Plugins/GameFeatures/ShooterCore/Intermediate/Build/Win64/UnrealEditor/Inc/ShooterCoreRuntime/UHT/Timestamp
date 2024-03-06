@@ -1,0 +1,13 @@
+D:\GitHub\RiveGame\Plugins\GameFeatures\ShooterCore\Source\ShooterCoreRuntime\Public\LyraWorldCollectable.h
+D:\GitHub\RiveGame\Plugins\GameFeatures\ShooterCore\Source\ShooterCoreRuntime\Public\ShooterCoreRuntimeSettings.h
+D:\GitHub\RiveGame\Plugins\GameFeatures\ShooterCore\Source\ShooterCoreRuntime\Public\Accolades\LyraAccoladeDefinition.h
+D:\GitHub\RiveGame\Plugins\GameFeatures\ShooterCore\Source\ShooterCoreRuntime\Public\Accolades\LyraAccoladeHostWidget.h
+D:\GitHub\RiveGame\Plugins\GameFeatures\ShooterCore\Source\ShooterCoreRuntime\Public\Input\AimAssistInputModifier.h
+D:\GitHub\RiveGame\Plugins\GameFeatures\ShooterCore\Source\ShooterCoreRuntime\Public\Input\AimAssistTargetComponent.h
+D:\GitHub\RiveGame\Plugins\GameFeatures\ShooterCore\Source\ShooterCoreRuntime\Public\Input\AimAssistTargetManagerComponent.h
+D:\GitHub\RiveGame\Plugins\GameFeatures\ShooterCore\Source\ShooterCoreRuntime\Public\Input\IAimAssistTargetInterface.h
+D:\GitHub\RiveGame\Plugins\GameFeatures\ShooterCore\Source\ShooterCoreRuntime\Public\MessageProcessors\AssistProcessor.h
+D:\GitHub\RiveGame\Plugins\GameFeatures\ShooterCore\Source\ShooterCoreRuntime\Public\MessageProcessors\ElimChainProcessor.h
+D:\GitHub\RiveGame\Plugins\GameFeatures\ShooterCore\Source\ShooterCoreRuntime\Public\MessageProcessors\ElimStreakProcessor.h
+D:\GitHub\RiveGame\Plugins\GameFeatures\ShooterCore\Source\ShooterCoreRuntime\Public\Messages\ControlPointStatusMessage.h
+D:\GitHub\RiveGame\Plugins\GameFeatures\ShooterCore\Source\ShooterCoreRuntime\Private\TDM_PlayerSpawningManagmentComponent.h
