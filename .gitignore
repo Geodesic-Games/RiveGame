@@ -84,3 +84,6 @@ Plugins/*/**/Intermediate/*
 .vsconfig
 RiveExamples.unrealvs
 shadertoolsconfig.json
+
+.DS_Store
+DerivedDataCache/*
