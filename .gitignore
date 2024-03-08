@@ -86,3 +86,4 @@ RiveExamples.unrealvs
 shadertoolsconfig.json
 
 .DS_Store
+DerivedDataCache/*
