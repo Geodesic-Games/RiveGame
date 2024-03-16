@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Fix of Android permissions for Android SDK 33 -->
+<root xmlns:android="http://schemas.android.com/apk/res/android">
+    <androidManifestUpdates>
+        <removePermission   android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+        <addPermission      android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+        <removePermission   android:name="android.permission.READ_EXTERNAL_STORAGE" />
+        <addPermission      android:name="android.permission.READ_EXTERNAL_STORAGE"  android:maxSdkVersion="28" />
+    </androidManifestUpdates>
+</root>

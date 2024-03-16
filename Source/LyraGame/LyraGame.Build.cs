@@ -84,6 +84,11 @@ public class LyraGame : ModuleRules
 		// Generate compile errors if using DrawDebug functions in test/shipping builds.
 		PublicDefinitions.Add("SHIPPING_DRAW_DEBUG_ERROR=1");
 		
+		if (Target.Platform == UnrealTargetPlatform.Android)
+		{
+			string manifestFile = System.IO.Path.Combine(ModuleDirectory, "AndroidSanitizePermissions_UPL.xml");
+			AdditionalPropertiesForReceipt.Add("AndroidPlugin", manifestFile);
+		}
 
 		SetupGameplayDebuggerSupport(Target);
 		SetupIrisSupport(Target);
