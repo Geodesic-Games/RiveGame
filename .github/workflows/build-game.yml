@@ -26,7 +26,7 @@ on:
 
 jobs:
   build-game-allelse:
-    runs-on: [self-hosted, Windows]
+    runs-on: [Windows]
     steps:
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
