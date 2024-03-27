@@ -1,0 +1,83 @@
+#### Secrets #####
+# Requires "TOKEN" to be defined with an access token from a github account that has access to the UnrealEngine source code
+
+#### Runner requirements ####
+## macOS ##
+# 1. A valid Xcode environment with macOS and iOS SDKs
+
+## Windows/Android/Linux ##
+# 1. Visual Studio 2022
+# 2. Android NDK setup: https://docs.unrealengine.com/5.3/en-US/how-to-set-up-android-sdk-and-ndk-for-your-unreal-engine-development-environment/
+# 3. Linux cross-compile toolchain: https://docs.unrealengine.com/5.3/en-US/linux-development-requirements-for-unreal-engine/ ; We could use another linux runner, but it'll save quite a bit of time to just cross compile to linux instead of having to build yet-another UE build
+
+
+name: Build Game
+
+on:
+  workflow_dispatch:
+    inputs:
+      ENGINE_VERSION:
+        type: string
+        description: Unreal Engine Release Version
+        default: "5.3.2"
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build-game-allelse:
+    runs-on: [self-hosted, Windows]
+    steps:
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+          path: "RiveGame"
+
+      - name: pull lfs because checkout doesnt
+        run: |
+          git lfs pull
+        working-directory: RiveGame
+
+      - name: Clone UE5 Source
+        uses: actions/checkout@v2
+        with:
+          repository: "EpicGames/UnrealEngine" # Adjust if using a fork
+          ref: "${{inputs.ENGINE_VERSION}}-release"
+          path: UE-${{inputs.ENGINE_VERSION}}
+          token: ${{ secrets.TOKEN }} # Ensure you have access to UE5 repo
+          clean: false
+
+      - name: Build UE5
+        run: |
+          .\Setup.bat
+          .\GenerateProjectFiles.bat
+        working-directory: UE-${{inputs.ENGINE_VERSION}}
+
+      - name: Version info
+        run: |
+          if("${{ github.ref }}" -match "^refs/tags/") {
+             $version = "${{ github.ref }}".Replace("refs/tags/", "")
+           } else {
+             $version = "${{ github.sha }}"
+           }
+           Write-Host "Setting VersionName to $version"
+
+           echo "GAME_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Build Win64 and Android Plugin
+        run: |
+          ./Engine/Build/BatchFiles/RunUAT.bat -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=Win64+Android -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -nocompileeditor -skipbuildeditor -cook  -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=Win64+Android -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompile -nocompileuat
+        working-directory: UE-${{inputs.ENGINE_VERSION}}
+
+      # - name: Remove PDB files
+      #   run: |
+      #     Get-ChildItem "${{github.workspace}}/RiveGame/Output/*.pdb" -Recurse | Remove-Item
+
+      # - name: Upload Artifacts
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: RiveGame-${{ env.RIVE_VERSION }}-ue-${{ inputs.ENGINE_VERSION}}
+      #     path: RiveGame/Output
