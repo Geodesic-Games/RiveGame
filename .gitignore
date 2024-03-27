@@ -87,3 +87,4 @@ shadertoolsconfig.json
 
 .DS_Store
 DerivedDataCache/*
+Releases/*
