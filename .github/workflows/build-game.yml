@@ -75,15 +75,15 @@ jobs:
 
           echo "GAME_VERSION=$version" >> $GITHUB_ENV
 
-      - name: Build macOS Universal
+      - name: Build macOS; Not-universal, as RiveLibrary + UE doesn't support Universal, we have to make separate builds entirely
         run: |
-          ./Engine/Build/BatchFiles/RunUAT.sh -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=Mac -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -cook  -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=Mac -specifiedarchitecture=arm64+x86_64 -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompileuat
+          ./Engine/Build/BatchFiles/RunUAT.sh -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=Mac -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -cook  -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=Mac -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompileuat
         working-directory: UE-${{inputs.ENGINE_VERSION}}
 
-      # - name: Remove PDB files
-      #   run: |
-      #     Get-ChildItem "${{github.workspace}}/RiveGame/Output/*.pdb" -Recurse | Remove-Item
-
+      - name: Zip output
+        run: |
+          echo "todo zip macOs output"
+          
       # - name: Upload Artifacts
       #   uses: actions/upload-artifact@v2
       #   with:
@@ -138,12 +138,16 @@ jobs:
           ./Engine/Build/BatchFiles/RunUAT.bat -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=Win64 -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -cook  -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=Win64 -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompileuat
         working-directory: UE-${{inputs.ENGINE_VERSION}}
 
-      # - name: Remove PDB files
-      #   run: |
-      #     Get-ChildItem "${{github.workspace}}/RiveGame/Output/*.pdb" -Recurse | Remove-Item
+      - name: Remove PDB files
+        run: |
+          Get-ChildItem "${{github.workspace}}/RiveGame/Output/*.pdb" -Recurse | Remove-Item
 
-      # - name: Upload Artifacts
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: RiveGame-${{ env.RIVE_VERSION }}-ue-${{ inputs.ENGINE_VERSION}}
-      #     path: RiveGame/Output
+      - name: Zip output
+        run: |
+           Compress-Archive -Path "${{github.workspace}}/RiveGame/RiveGame/Output/*" -DestinationPath "${{github.workspace}}/RiveGame/RiveGame/Output.zip"
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: RiveGame-${{ env.GAME_VERSION }}-ue-${{ inputs.ENGINE_VERSION}}
+          path: RiveGame/Output.zip
