@@ -25,6 +25,70 @@ on:
       - "*"
 
 jobs:
+  build-game-apple:
+    runs-on: macOS
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+          path: "RiveGame"
+
+      - name: init and pull lfs because checkout doesnt
+        run: |
+          git submodule init
+          git submodule update
+          git lfs pull
+        working-directory: RiveGame
+
+      # required for hooks on macOS
+      - name: Make library/services in our temp directory, required for post checkout hook FixDependencyFiles.sh for macOS
+        run: |
+          mkdir -p "${{runner.temp}}/Library/Services"
+          echo "${{runner.temp}}/Library/Services"
+          ls -al "${{runner.temp}}/Library/Services"
+
+      - name: Clone UE5 Source
+        uses: actions/checkout@v2
+        with:
+          repository: "EpicGames/UnrealEngine" # Adjust if using a fork
+          ref: "${{inputs.ENGINE_VERSION}}-release"
+          path: UE-${{inputs.ENGINE_VERSION}}
+          token: ${{ secrets.TOKEN }} # Ensure you have access to UE5 repo
+          clean: false
+          fetch-depth: 1
+        continue-on-error: true
+
+      - name: Build UE5
+        run: |
+          ./Setup.sh
+          ./GenerateProjectFiles.sh
+        working-directory: UE-${{inputs.ENGINE_VERSION}}
+
+      - name: Version info
+        run: |
+          if("${{ github.ref }}" -match "^refs/tags/") {
+             $version = "${{ github.ref }}".Replace("refs/tags/", "")
+           } else {
+             $version = "${{ github.sha }}"
+           }
+           Write-Host "Setting VersionName to $version"
+
+           echo "GAME_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+      - name: Build Win64; Android temporarily disabled due to build crashing
+        run: |
+          ./Engine/Build/BatchFiles/RunUAT.sh -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=Mac+IOS -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -cook  -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=Mac+IOS -specifiedarchitecture=arm64+x86_64 -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompileuat
+        working-directory: UE-${{inputs.ENGINE_VERSION}}
+
+      # - name: Remove PDB files
+      #   run: |
+      #     Get-ChildItem "${{github.workspace}}/RiveGame/Output/*.pdb" -Recurse | Remove-Item
+
+      # - name: Upload Artifacts
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: RiveGame-${{ env.RIVE_VERSION }}-ue-${{ inputs.ENGINE_VERSION}}
+      #     path: RiveGame/Output
   build-game-allelse:
     runs-on: windows-latest
     steps:
