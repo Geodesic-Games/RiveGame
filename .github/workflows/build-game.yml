@@ -66,14 +66,14 @@ jobs:
 
       - name: Version info
         run: |
-          if("${{ github.ref }}" -match "^refs/tags/") {
-             $version = "${{ github.ref }}".Replace("refs/tags/", "")
-           } else {
-             $version = "${{ github.sha }}"
-           }
-           Write-Host "Setting VersionName to $version"
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            version=${GITHUB_REF#refs/tags/}
+          else
+            version=${GITHUB_SHA}
+          fi
+          echo "Setting VersionName to $version"
 
-           echo "GAME_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+          echo "GAME_VERSION=$version" >> $GITHUB_ENV
 
       - name: Build Win64; Android temporarily disabled due to build crashing
         run: |
