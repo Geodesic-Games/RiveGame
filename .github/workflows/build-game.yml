@@ -80,15 +80,21 @@ jobs:
           ./Engine/Build/BatchFiles/RunUAT.sh -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=Mac -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -cook  -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=Mac -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompileuat
         working-directory: UE-${{inputs.ENGINE_VERSION}}
 
-      - name: Zip output
+      - name: Remove Saved files
         run: |
-          echo "todo zip macOs output"
+          find . -type d -name "Saved" -exec rm -rf {} +
+        working-directory: RiveGame/Output
+
+      - uses: edgarrc/action-7z@v1
+        with:
+          args: 7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/Mac.7z ${{github.workspace}}/RiveGame/Output/Mac/*
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: RiveGame-Mac-${{ env.GAME_VERSION }}-ue-${{inputs.ENGINE_VERSION}}
+          path: RiveGame/Mac.7z
           
-      # - name: Upload Artifacts
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: RiveGame-${{ env.RIVE_VERSION }}-ue-${{ inputs.ENGINE_VERSION}}
-      #     path: RiveGame/Output
   build-game-allelse:
     runs-on: windows-latest
     steps:
@@ -130,7 +136,6 @@ jobs:
              $version = "${{ github.sha }}"
            }
            Write-Host "Setting VersionName to $version"
-
            echo "GAME_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Build Win64; Android temporarily disabled due to build crashing
@@ -138,16 +143,18 @@ jobs:
           ./Engine/Build/BatchFiles/RunUAT.bat -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=Win64 -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -cook  -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=Win64 -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompileuat
         working-directory: UE-${{inputs.ENGINE_VERSION}}
 
-      - name: Remove PDB files
+      - name: Remove PDB, Saved files
         run: |
-          Get-ChildItem "${{github.workspace}}/RiveGame/Output/*.pdb" -Recurse | Remove-Item
+          Get-ChildItem "*.pdb" -Recurse | Remove-Item
+          Get-ChildItem -Include Saved -Recurse | Remove-Item -Recurse
+        working-directory: RiveGame/Output
 
-      - name: Zip output
-        run: |
-           Compress-Archive -Path "${{github.workspace}}/RiveGame/RiveGame/Output/*" -DestinationPath "${{github.workspace}}/RiveGame/RiveGame/Output.zip"
+      - uses: edgarrc/action-7z@v1
+        with:
+          args: 7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/Windows.7z ${{github.workspace}}/RiveGame/Output/Windows/*
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: RiveGame-${{ env.GAME_VERSION }}-ue-${{ inputs.ENGINE_VERSION}}
-          path: RiveGame/Output.zip
+          name: RiveGame-Win-${{ env.GAME_VERSION }}-ue-${{inputs.ENGINE_VERSION}}
+          path: RiveGame/Windows.7z
