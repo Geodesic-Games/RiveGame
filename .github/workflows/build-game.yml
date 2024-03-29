@@ -75,9 +75,9 @@ jobs:
 
           echo "GAME_VERSION=$version" >> $GITHUB_ENV
 
-      - name: Build Win64; Android temporarily disabled due to build crashing
+      - name: Build macOS Universal
         run: |
-          ./Engine/Build/BatchFiles/RunUAT.sh -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=Mac+IOS -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -cook  -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=Mac+IOS -specifiedarchitecture=arm64+x86_64 -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompileuat
+          ./Engine/Build/BatchFiles/RunUAT.sh -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=Mac -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -cook  -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=Mac -specifiedarchitecture=arm64+x86_64 -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompileuat
         working-directory: UE-${{inputs.ENGINE_VERSION}}
 
       # - name: Remove PDB files
