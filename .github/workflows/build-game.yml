@@ -20,6 +20,22 @@ on:
         type: string
         description: Unreal Engine Release Version
         default: "5.3.2"
+      BUILD_MAC:
+        type: boolean
+        description: Should we build macOS?
+        default: false
+      BUILD_IOS:
+        type: boolean
+        description: Should we build iOS?
+        default: false
+      BUILD_WINDOWS:
+        type: boolean
+        description: Should we build Windows?
+        default: true
+      BUILD_ANDROID:
+        type: boolean
+        description: Should we build android?
+        default: false
   push:
     tags:
       - "*"
@@ -27,6 +43,7 @@ on:
 jobs:
   build-game-apple:
     runs-on: macOS
+    if: ${{inputs.BUILD_MAC}} == "true" || ${{inputs.BUILD_IOS}} == "true"
     steps:
       - uses: actions/checkout@v3
         with:
@@ -76,9 +93,16 @@ jobs:
 
           echo "GAME_VERSION=$version" >> $GITHUB_ENV
 
-      - name: Build macOS; Not-universal, as RiveLibrary + UE doesn't support Universal, we have to make separate builds entirely
+      - name: build macOS; Not-universal, as RiveLibrary + UE doesn't support Universal, we have to make separate builds entirely
+        if: ${{inputs.BUILD_MAC}} == "true"
         run: |
-          ./Engine/Build/BatchFiles/RunUAT.sh -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=Mac -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -cook  -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=Mac -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompileuat
+          ./Engine/Build/BatchFiles/RunUAT.sh -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=Mac -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -cook -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=Mac -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompileuat
+        working-directory: UE-${{inputs.ENGINE_VERSION}}
+
+      - name: build iOS
+        if: ${{inputs.BUILD_IOS}} == "true"
+        run: |
+          ./Engine/Build/BatchFiles/RunUAT.sh -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=IOS -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -cook -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=IOS -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompileuat
         working-directory: UE-${{inputs.ENGINE_VERSION}}
 
       - name: Remove Saved files
@@ -87,17 +111,32 @@ jobs:
         working-directory: RiveGame/Output
 
       - uses: edgarrc/action-7z@v1
+        if: ${{inputs.BUILD_MAC}} == "true"
         with:
           args: 7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/Mac.7z ${{github.workspace}}/RiveGame/Output/Mac/*
 
-      - name: Upload Artifacts
+      - uses: edgarrc/action-7z@v1
+        if: ${{inputs.BUILD_IOS}} == "true"
+        with:
+          args: 7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/IOS.7z ${{github.workspace}}/RiveGame/Output/IOS/*
+      
+      - name: Upload Mac Artifacts
         uses: actions/upload-artifact@v2
+        if: ${{inputs.BUILD_MAC}} == "true"
         with:
           name: RiveGame-Mac-${{ env.GAME_VERSION }}-ue-${{inputs.ENGINE_VERSION}}
           path: RiveGame/Mac.7z
 
+      - name: Upload IOS Artifacts
+        uses: actions/upload-artifact@v2
+        if: ${{inputs.BUILD_IOS}} == "true"
+        with:
+          name: RiveGame-IOS-${{ env.GAME_VERSION }}-ue-${{inputs.ENGINE_VERSION}}
+          path: RiveGame/IOS.7z
+
   build-game-allelse:
     runs-on: windows-latest
+    if: ${{inputs.BUILD_WINDOWS}} == "true" || ${{inputs.BUILD_ANDROID}} == "true"
     steps:
       - name: Add msbuild to PATH
         uses: microsoft/setup-msbuild@v2
@@ -140,9 +179,16 @@ jobs:
            Write-Host "Setting VersionName to $version"
            echo "GAME_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-      - name: Build Win64; Android temporarily disabled due to build crashing
+      - name: Build Win64
+        if: ${{inputs.BUILD_WINDOWS}} == "true"
         run: |
-          ./Engine/Build/BatchFiles/RunUAT.bat -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=Win64 -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -cook  -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=Win64 -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompileuat
+          ./Engine/Build/BatchFiles/RunUAT.bat -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=Win64 -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -cook -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=Win64 -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompileuat
+        working-directory: UE-${{inputs.ENGINE_VERSION}}
+
+      - name: Build Android
+        if: ${{inputs.BUILD_ANDROID}} == "true"
+        run: |
+          ./Engine/Build/BatchFiles/RunUAT.bat -ScriptsForProject="${{github.workspace}}/RiveGame/RiveGame.uproject" Turnkey -command=VerifySdk -platform=Android -UpdateIfNeeded -project="${{github.workspace}}/RiveGame/RiveGame.uproject" BuildCookRun -nop4 -utf8output -cook -project="${{github.workspace}}/RiveGame/RiveGame.uproject" -target=LyraGame -platform=Android -stage -archive -package -build -pak -iostore -compressed -prereqs -archivedirectory="${{github.workspace}}/RiveGame/Output" -manifests -clientconfig=Development -nocompileuat
         working-directory: UE-${{inputs.ENGINE_VERSION}}
 
       - name: Remove PDB, Saved files
@@ -152,11 +198,25 @@ jobs:
         working-directory: RiveGame/Output
 
       - uses: edgarrc/action-7z@v1
+        if: ${{inputs.BUILD_WINDOWS}} == "true"
         with:
           args: 7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/Windows.7z ${{github.workspace}}/RiveGame/Output/Windows/*
 
-      - name: Upload Artifacts
+      - uses: edgarrc/action-7z@v1
+        if: ${{inputs.BUILD_ANDROID}} == "true"
+        with:
+          args: 7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/Android.7z ${{github.workspace}}/RiveGame/Output/Android/*
+  
+      - name: Upload Windows Artifacts
         uses: actions/upload-artifact@v2
+        if: ${{inputs.BUILD_WINDOWS}} == "true"
         with:
           name: RiveGame-Win-${{ env.GAME_VERSION }}-ue-${{inputs.ENGINE_VERSION}}
           path: RiveGame/Windows.7z
+
+      - name: Upload Android Artifacts
+        uses: actions/upload-artifact@v2
+        if: ${{inputs.BUILD_ANDROID}} == "true"
+        with:
+          name: RiveGame-Android-${{ env.GAME_VERSION }}-ue-${{inputs.ENGINE_VERSION}}
+          path: RiveGame/Android.7z
