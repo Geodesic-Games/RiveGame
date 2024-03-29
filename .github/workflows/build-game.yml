@@ -22,19 +22,19 @@ on:
         default: "5.3.2"
       BUILD_MAC:
         type: boolean
-        description: Should we build macOS?
+        description: Build macOS
         default: false
       BUILD_IOS:
         type: boolean
-        description: Should we build iOS?
+        description: Build iOS
         default: false
       BUILD_WINDOWS:
         type: boolean
-        description: Should we build Windows?
+        description: Build Windows
         default: true
       BUILD_ANDROID:
         type: boolean
-        description: Should we build android?
+        description: Build Android
         default: false
   push:
     tags:
