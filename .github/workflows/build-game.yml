@@ -45,6 +45,10 @@ jobs:
     runs-on: macOS
     if: inputs.BUILD_MAC == true || inputs.BUILD_IOS == true
     steps:
+      - name: setup
+        run: |
+          brew install p7zip
+      
       - uses: actions/checkout@v3
         with:
           clean: true
@@ -110,15 +114,15 @@ jobs:
           find . -type d -name "Saved" -exec rm -rf {} +
         working-directory: RiveGame/Output
 
-      - uses: edgarrc/action-7z@v1
+      - name: Archive Mac
         if: inputs.BUILD_MAC == true
-        with:
-          args: 7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/Mac.7z ${{github.workspace}}/RiveGame/Output/Mac/*
+        run: |
+          7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/Mac.7z ${{github.workspace}}/RiveGame/Output/Mac/*
 
-      - uses: edgarrc/action-7z@v1
+      - name: Archive IOS
         if: inputs.BUILD_IOS == true
-        with:
-          args: 7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/IOS.7z ${{github.workspace}}/RiveGame/Output/IOS/*
+        run: |
+          7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/IOS.7z ${{github.workspace}}/RiveGame/Output/IOS/*
       
       - name: Upload Mac Artifacts
         uses: actions/upload-artifact@v2
@@ -197,15 +201,15 @@ jobs:
           Get-ChildItem -Include Saved -Recurse | Remove-Item -Recurse
         working-directory: RiveGame/Output
 
-      - uses: edgarrc/action-7z@v1
+      - name: Archive Windows
         if: inputs.BUILD_WINDOWS == true
-        with:
-          args: 7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/Windows.7z ${{github.workspace}}/RiveGame/Output/Windows/*
+        run: |
+          7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/Windows.7z ${{github.workspace}}/RiveGame/Output/Windows/*
 
-      - uses: edgarrc/action-7z@v1
+      - name: Archive Android
         if: inputs.BUILD_ANDROID == true
-        with:
-          args: 7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/Android.7z ${{github.workspace}}/RiveGame/Output/Android/*
+        run: |
+          7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/Android.7z ${{github.workspace}}/RiveGame/Output/Android/*
   
       - name: Upload Windows Artifacts
         uses: actions/upload-artifact@v2
