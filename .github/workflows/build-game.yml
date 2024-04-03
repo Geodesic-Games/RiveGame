@@ -139,7 +139,7 @@ jobs:
           path: RiveGame/IOS.7z
 
   build-game-allelse:
-    runs-on: windows-latest
+    runs-on: Windows
     if: inputs.BUILD_WINDOWS == true || inputs.BUILD_ANDROID == true
     steps:
       - name: Add msbuild to PATH
