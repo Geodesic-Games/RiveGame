@@ -209,7 +209,7 @@ jobs:
       - name: Archive Android
         if: inputs.BUILD_ANDROID == true
         run: |
-        C:/"Program Files"/7-Zip/7z.exe a -t7z -mx=9 ${{github.workspace}}/RiveGame/Android.7z ${{github.workspace}}/RiveGame/Output/Android/*
+          C:/"Program Files"/7-Zip/7z.exe a -t7z -mx=9 ${{github.workspace}}/RiveGame/Android.7z ${{github.workspace}}/RiveGame/Output/Android/*
   
       - name: Upload Windows Artifacts
         uses: actions/upload-artifact@v2
