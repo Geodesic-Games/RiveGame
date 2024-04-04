@@ -204,12 +204,12 @@ jobs:
       - name: Archive Windows
         if: inputs.BUILD_WINDOWS == true
         run: |
-          7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/Windows.7z ${{github.workspace}}/RiveGame/Output/Windows/*
+          7z.exe a -t7z -mx=9 ${{github.workspace}}/RiveGame/Windows.7z ${{github.workspace}}/RiveGame/Output/Windows/*
 
       - name: Archive Android
         if: inputs.BUILD_ANDROID == true
         run: |
-          7z a -t7z -mx=9 ${{github.workspace}}/RiveGame/Android.7z ${{github.workspace}}/RiveGame/Output/Android/*
+          7z.exe a -t7z -mx=9 ${{github.workspace}}/RiveGame/Android.7z ${{github.workspace}}/RiveGame/Output/Android/*
   
       - name: Upload Windows Artifacts
         uses: actions/upload-artifact@v2
